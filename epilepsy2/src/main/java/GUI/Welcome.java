@@ -16,7 +16,7 @@ import javax.swing.JButton;
  */
 public class Welcome extends javax.swing.JFrame {
 
-    private Db db;
+    private SocketOb db;
     public ClientMenu menu = new ClientMenu();
 
     public void setMenu(ClientMenu menu) {
@@ -43,7 +43,7 @@ public class Welcome extends javax.swing.JFrame {
      * Creates new form Server_Interface
      * @param db
      */
-    public Welcome(Db db) {
+    public Welcome(SocketOb db) {
         this.db = db;
         initComponents();
     }

@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 public class SignUp extends javax.swing.JFrame {
 
     public ClientMenu menu;
-    private Db db;
+    private SocketOb db;
 
     Patient patient = new Patient(null, null, null, null, null, null, null, null, null);
 
@@ -26,7 +26,7 @@ public class SignUp extends javax.swing.JFrame {
      *
      * @param db
      */
-    public SignUp(Db db) {
+    public SignUp(SocketOb db) {
         this.db = db;
         initComponents();
     }

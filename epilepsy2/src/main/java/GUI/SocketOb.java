@@ -14,7 +14,7 @@ import java.net.Socket;
  *
  * @author andre
  */
-public class Db {
+public class SocketOb {
 
     private OutputStream outputStream = null;
     private InputStream inputStream = null;
@@ -22,7 +22,7 @@ public class Db {
     private ObjectInputStream objectInputStream = null;
     private Socket socket = null;
 
-    public Db() {
+    public SocketOb() {
     }
 
     public OutputStream getOutputStream() {

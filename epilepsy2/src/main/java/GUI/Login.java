@@ -16,13 +16,13 @@ import java.util.logging.Logger;
 public class Login extends javax.swing.JFrame {
     
     public ClientMenu menu= new ClientMenu();
-    private Db db;
+    private SocketOb db;
    
     /**
      * Creates new form Login
      * @param db
      */
-    public Login(Db db) {
+    public Login(SocketOb db) {
         this.db = db;
         initComponents();
     }

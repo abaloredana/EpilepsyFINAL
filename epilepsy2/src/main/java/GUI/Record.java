@@ -24,7 +24,7 @@ public class Record extends javax.swing.JFrame {
 
     private static String symptoms;
     EEGSample eegSample;
-    private static Db db;
+    private static SocketOb db;
 
     /**
      * Creates new form MySignals
