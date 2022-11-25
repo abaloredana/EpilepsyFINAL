@@ -12,7 +12,7 @@ import Client.Patient;
  */
 public class ClientMenu extends javax.swing.JFrame {
 
-    public static Patient patient;
+    public Patient patient;
     public Record rec = new Record();
     public MySignals sam = new MySignals();
 
@@ -24,9 +24,11 @@ public class ClientMenu extends javax.swing.JFrame {
         this.patient = patient;
     }
 
-    public static Patient getPatient() {
+    public Patient getPatient() {
         return patient;
     }
+
+    
 
     /**
      * Creates new form ClientMenu
@@ -102,7 +104,7 @@ public class ClientMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_RecordActionPerformed
 
     private void seeSignalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeSignalsActionPerformed
-        //sam.setVisible(true);
+        sam.setVisible(true);
     }//GEN-LAST:event_seeSignalsActionPerformed
 
     /**

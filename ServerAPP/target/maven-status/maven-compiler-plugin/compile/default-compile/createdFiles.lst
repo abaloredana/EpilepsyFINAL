@@ -1,0 +1,8 @@
+db\interfaces\DBManager.class
+db\interfaces\EEGManager.class
+db\sqlite\PatientManagerImpl.class
+db\sqlite\EEGManagerImpl.class
+Main\ServerAPP.class
+Main\ServerAPPThreads.class
+db\interfaces\PatientManager.class
+db\sqlite\DBManagerImpl.class

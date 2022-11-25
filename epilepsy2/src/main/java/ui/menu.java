@@ -60,17 +60,17 @@ public class menu {
         try {
             objectInputStream.close();
         } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             objectOutputStream.close();
         } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             socket.close();
         } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
