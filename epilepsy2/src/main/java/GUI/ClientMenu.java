@@ -12,7 +12,7 @@ import Client.Patient;
  */
 public class ClientMenu extends javax.swing.JFrame {
 
-    public Patient patient;
+    public static Patient patient;
     public Record rec = new Record();
     public MySignals sam = new MySignals();
 
@@ -24,7 +24,7 @@ public class ClientMenu extends javax.swing.JFrame {
         this.patient = patient;
     }
 
-    public Patient getPatient() {
+    public static Patient getPatient() {
         return patient;
     }
 
