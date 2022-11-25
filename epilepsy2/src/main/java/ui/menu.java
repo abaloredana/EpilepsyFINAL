@@ -45,6 +45,7 @@ public class menu {
     
     static int option = 0;
     public static void main(String[] args) throws Exception {
+        
         //option = 0;
         //hola
         reader = new BufferedReader(new InputStreamReader(System.in));

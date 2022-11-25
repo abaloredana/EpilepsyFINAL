@@ -16,11 +16,11 @@ import java.net.Socket;
  */
 public class Db {
 
-    private static OutputStream outputStream = null;
-    private static InputStream inputStream = null;
-    private static ObjectOutputStream objectOutputStream = null;
-    private static ObjectInputStream objectInputStream = null;
-    private static Socket socket = null;
+    private OutputStream outputStream = null;
+    private InputStream inputStream = null;
+    private ObjectOutputStream objectOutputStream = null;
+    private ObjectInputStream objectInputStream = null;
+    private Socket socket = null;
 
     public Db() {
     }
@@ -46,23 +46,25 @@ public class Db {
     }
 
     public void setOutputStream(OutputStream outputStream) {
-        Db.outputStream = outputStream;
+        this.outputStream = outputStream;
     }
 
     public void setInputStream(InputStream inputStream) {
-        Db.inputStream = inputStream;
+        this.inputStream = inputStream;
     }
 
     public void setObjectOutputStream(ObjectOutputStream objectOutputStream) {
-        Db.objectOutputStream = objectOutputStream;
+        this.objectOutputStream = objectOutputStream;
     }
 
     public void setObjectInputStream(ObjectInputStream objectInputStream) {
-        Db.objectInputStream = objectInputStream;
+        this.objectInputStream = objectInputStream;
     }
 
     public void setSocket(Socket socket) {
-        Db.socket = socket;
+        this.socket = socket;
     }
+
+
 
 }

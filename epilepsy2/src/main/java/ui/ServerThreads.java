@@ -9,9 +9,11 @@ import Client.Patient;
 import db.interfaces.DBManager;
 import db.interfaces.EEGManager;
 import db.interfaces.PatientManager;
+import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -69,15 +71,14 @@ public class ServerThreads implements Runnable {
                 }
             } else {
                 try {
-                    System.out.println(op);
-                    patient = (Patient) (objectInputStream.readObject());
-                    System.out.println(patient);
-                    patient = patientManager.getPatient(patient.getUsername(), patient.getPassword());
-                    System.out.println(patient);
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                    String username = bufferedReader.readLine();
+                    String password = bufferedReader.readLine();
+                    patient = patientManager.getPatient(username, password);
                     objectOutputStream.writeObject(patient);
                 } catch (EOFException ex) {
                     System.out.println("All data have been correctly read.");
-                } catch (IOException | ClassNotFoundException ex) {
+                } catch (IOException ex) {
                     System.out.println("Unable to read from the client.");
                     Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
                 }

@@ -6,6 +6,7 @@ package GUI;
 
 import Client.Patient;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -163,7 +164,9 @@ public class Login extends javax.swing.JFrame {
         String pwd = new String(passwordfield.getPassword());
         patient.setPassword(pwd); 
         try {
-            db.getObjectOutputStream().writeObject(patient);
+            PrintWriter printWriter = new PrintWriter(db.getOutputStream(), true);
+            printWriter.println(patient.getUsername());
+            printWriter.println(patient.getPassword());
             Patient patient1 = (Patient) (db.getObjectInputStream().readObject());
             menu.setPatient(patient1);
             System.out.println(patient1);
