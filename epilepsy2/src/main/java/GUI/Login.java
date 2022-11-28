@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class Login extends javax.swing.JFrame {
     
-    public ClientMenu menu= new ClientMenu();
+    public ClientMenu menu;
     private SocketOb db;
    
     /**
@@ -163,6 +163,7 @@ public class Login extends javax.swing.JFrame {
         patient.setUsername(usernametxt.getText()); 
         String pwd = new String(passwordfield.getPassword());
         patient.setPassword(pwd); 
+        menu= new ClientMenu(db);
         try {
             PrintWriter printWriter = new PrintWriter(db.getOutputStream(), true);
             printWriter.println(patient.getUsername());
@@ -173,7 +174,6 @@ public class Login extends javax.swing.JFrame {
         } catch (ClassNotFoundException | IOException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         menu.setVisible(true);
     }//GEN-LAST:event_loginButtonActionPerformed
 

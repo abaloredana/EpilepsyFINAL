@@ -6,6 +6,7 @@ package GUI;
 
 import BITalino.BitalinoDemo;
 import Client.EEGSample;
+import Client.Patient;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,17 +21,22 @@ import java.util.logging.Logger;
 public class Record extends javax.swing.JFrame {
 
     public ClientMenu cmenu;
-
-    private static String symptoms;
     EEGSample eegSample;
-    private static SocketOb db;
-    
+    private SocketOb db;
+    private Patient patient;
 
     /**
-     * Creates new form MySignals
+     * SocketOb db Creates new form MySignals
+     * @param db
+     * @param patient
      */
-    public Record() {
+    public Record(SocketOb db, Patient patient) {
+        this.db = db;
+        this.patient = patient;
         initComponents();
+    }
+
+    public Record() {
     }
 
     /**
@@ -129,15 +135,24 @@ public class Record extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void startRecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startRecActionPerformed
-
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        String symptoms;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy_MM_dd__HH_mm_ss");
         LocalDateTime now = LocalDateTime.now();
         String dos = (String) dtf.format(now);
-        BitalinoDemo bitalinoDemo = new BitalinoDemo();
+        /*BitalinoDemo bitalinoDemo = new BitalinoDemo();
         bitalinoDemo.recordSignal(ClientMenu.getPatient().getMAC()); 
         ArrayList<Integer> eeg = bitalinoDemo.getList1();
-        ArrayList<Integer> elg = bitalinoDemo.getList2();
-        eegSample = new EEGSample(eeg, elg, dos, symptomstxt.getText(), ClientMenu.getPatient().getId());
+        ArrayList<Integer> elg = bitalinoDemo.getList2();*/
+        ArrayList<Integer> eeg = new ArrayList<>();
+        eeg.add(1);
+        eeg.add(2);
+        ArrayList<Integer> elg = new ArrayList<>();
+        elg.add(3);
+        elg.add(4);
+        System.out.println(patient);
+        symptoms = symptomstxt.getText();
+        eegSample = new EEGSample(eeg, elg, dos,symptoms , patient.getId());
+        System.out.println(eegSample);
         try {
             db.getObjectOutputStream().writeObject(eegSample);
         } catch (IOException ex) {
@@ -147,7 +162,7 @@ public class Record extends javax.swing.JFrame {
     }//GEN-LAST:event_startRecActionPerformed
 
     private void goBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goBackActionPerformed
-
+        cmenu = new ClientMenu(db);
         cmenu.setVisible(true);
     }//GEN-LAST:event_goBackActionPerformed
 

@@ -5,6 +5,9 @@
 package GUI;
 
 import Client.Patient;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -12,9 +15,10 @@ import Client.Patient;
  */
 public class ClientMenu extends javax.swing.JFrame {
 
-    public static Patient patient;
-    public Record rec = new Record();
-    public MySignals sam = new MySignals();
+    public Patient patient;
+    public Record rec;
+    public MySignals sam;
+    private SocketOb db;
 
     public ClientMenu(Patient patient) {
         this.patient = patient;
@@ -24,17 +28,20 @@ public class ClientMenu extends javax.swing.JFrame {
         this.patient = patient;
     }
 
-    public static Patient getPatient() {
+    public Patient getPatient() {
         return patient;
     }
 
-    
-
     /**
      * Creates new form ClientMenu
+     * @param db
      */
-    public ClientMenu() {
+    public ClientMenu(SocketOb db) {
+        this.db = db;
         initComponents();
+    }
+
+    public ClientMenu() {
     }
 
     /**
@@ -100,11 +107,31 @@ public class ClientMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void RecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecordActionPerformed
-        rec.setVisible(true);        // TODO add your handling code here:
+        rec = new Record(db,patient);
+        rec.setVisible(true);    
+        int option = 1;
+        try {
+            db.getOutputStream().write(option);
+        } catch (IOException ex) {
+            Logger.getLogger(Welcome.class.getName()).log(Level.SEVERE, null, ex);
+        }// TODO add your handling code here:
     }//GEN-LAST:event_RecordActionPerformed
 
     private void seeSignalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeSignalsActionPerformed
+        sam = new MySignals(db,patient);
         sam.setVisible(true);
+        int option = 2;
+        try {
+            db.getOutputStream().write(option);
+        } catch (IOException ex) {
+            Logger.getLogger(Welcome.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //ArrayList<EEGSample> eegs1 = new ArrayList<>();
+        //outputStream.write(patient_id);
+        //int eegs_size = inputStream.read();
+        //for (int i = 0; i < eegs_size; i++) {
+        //  eegs1.add((EEGSample) objectInputStream.readObject());
+        //}
     }//GEN-LAST:event_seeSignalsActionPerformed
 
     /**

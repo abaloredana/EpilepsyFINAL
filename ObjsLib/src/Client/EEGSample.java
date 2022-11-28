@@ -6,6 +6,7 @@ package Client;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,8 +17,9 @@ public class EEGSample implements Serializable {
     private static final long serialVersionUID = -6291904286218553733L;
 
     private Integer id;
-    private ArrayList<Integer> eeg = new ArrayList<Integer>();
-    private ArrayList<Integer> elg = new ArrayList<Integer>();
+    private ArrayList<Integer> eeg = new ArrayList<>();
+    private ArrayList<Integer> elg = new ArrayList<>();
+    private String path;
     private String dos;
     private String observations;
     private int patient_id;
@@ -82,6 +84,14 @@ public class EEGSample implements Serializable {
 
     public Integer getId() {
         return id;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     @Override

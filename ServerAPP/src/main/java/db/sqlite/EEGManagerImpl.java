@@ -60,13 +60,12 @@ public class EEGManagerImpl implements EEGManager {
     @Override
     public void newEEGSample(EEGSample eegSample) {
         try {
-            sql = "INSERT INTO EEGSample(eeg, elg, dos, observations, patient_id)" + "VALUES(?,?,?,?,?);";
+            sql = "INSERT INTO EEGSample(path , dos, observations, patient_id)" + "VALUES(?,?,?,?);";
             p = c.prepareStatement(sql);
-            p.setObject(1, eegSample.getEeg());
-            p.setObject(2, eegSample.getElg());
-            p.setString(3, eegSample.getDos());
-            p.setString(4, eegSample.getObservations());
-            p.setInt(5, eegSample.getPatient_id());
+            p.setObject(1, eegSample.getPath());
+            p.setString(2, eegSample.getDos());
+            p.setString(3, eegSample.getObservations());
+            p.setInt(4, eegSample.getPatient_id());
             p.executeUpdate();
             p.close();
 

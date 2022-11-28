@@ -4,14 +4,14 @@
  */
 package ui;
 
-import Client.EEGSample;
 import GUI.SocketOb;
 import GUI.Welcome;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,26 +23,10 @@ public class menu {
 
     private static Welcome welcome;
     public static boolean v1 = true;
-    private static SocketOb db;
 
     public static void main(String[] args) throws Exception {
+        SocketOb db;
         db = new SocketOb();
-        connectToServer();
-        welcome = new Welcome(db);
-        welcome.setVisible(v1);
-    }
-
-    private static ArrayList<EEGSample> requestEEGSamples() throws IOException, ClassNotFoundException {
-        ArrayList<EEGSample> eegs1 = new ArrayList<>();
-        //outputStream.write(patient_id);
-        //int eegs_size = inputStream.read();
-        //for (int i = 0; i < eegs_size; i++) {
-        //  eegs1.add((EEGSample) objectInputStream.readObject());
-        //}
-        return eegs1;
-    }
-
-    private static void connectToServer() {
         try {
             db.setSocket(new Socket("localhost", 9000));
             db.setOutputStream(db.getSocket().getOutputStream());
@@ -54,9 +38,13 @@ public class menu {
             System.exit(-1);
             Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        welcome = new Welcome(db);
+        welcome.setVisible(v1);
     }
 
-    private static void releaseResources(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream, Socket socket) {
+    private static void releaseResources(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream, Socket socket,
+            InputStream inputStream, OutputStream outputStream) {
         try {
             objectInputStream.close();
         } catch (IOException ex) {
@@ -69,6 +57,16 @@ public class menu {
         }
         try {
             socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            outputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            inputStream.close();
         } catch (IOException ex) {
             Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -6,14 +6,9 @@ package db.sqlite;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import db.interfaces.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class DBManagerImpl implements DBManager {
 
@@ -58,7 +53,7 @@ public class DBManagerImpl implements DBManager {
             statement1.executeUpdate(table1);
             statement1 = c.createStatement();
             String table2 = "CREATE TABLE IF NOT EXISTS EEGSample " + "(id     INTEGER  PRIMARY KEY AUTOINCREMENT,"
-                    + " eeg TEXT NOT NULL, " + " elg TEXT NOT NULL, " + " dos DATE NOT NULL, " + "observations TEXT, " 
+                    + " path TEXT NOT NULL, " + " dos DATE NOT NULL, " + "observations TEXT, " 
                     + " patient_id INTEGER, " + " FOREIGN KEY(patient_id) REFERENCES patient(id))";
             statement1.executeUpdate(table2);
             statement1.close();

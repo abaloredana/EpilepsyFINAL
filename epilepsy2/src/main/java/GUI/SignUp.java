@@ -361,7 +361,7 @@ public class SignUp extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Signup was successful");
         }
 
-        menu = new ClientMenu();
+        menu = new ClientMenu(db);
         try {
             db.getObjectOutputStream().writeObject(patient);
             Patient patient1 = (Patient) (db.getObjectInputStream().readObject());

@@ -4,7 +4,6 @@
  */
 package GUI;
 
-import Client.Patient;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,16 +16,6 @@ import javax.swing.JButton;
 public class Welcome extends javax.swing.JFrame {
 
     private SocketOb db;
-    public ClientMenu menu = new ClientMenu();
-
-    public void setMenu(ClientMenu menu) {
-        this.menu = menu;
-    }
-
-    public ClientMenu getMenu() {
-        return menu;
-    }
-
 
     public JButton getLoginbutton() {
         return loginbutton;

@@ -4,17 +4,29 @@
  */
 package GUI;
 
+import Client.Patient;
+
 /**
  *
  * @author loredanaabalo
  */
 public class MySignals extends javax.swing.JFrame {
 
+    private SocketOb db;
+    private Patient patient;
+
     /**
      * Creates new form MySignals
+     * @param db
+     * @param patient
      */
-    public MySignals() {
+    public MySignals(SocketOb db, Patient patient) {
+        this.db = db;
+        this.patient = patient;
         initComponents();
+    }
+
+    public MySignals() {
     }
 
     /**
@@ -70,10 +82,8 @@ public class MySignals extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        
         System.out.print("holaaaa");
-        
-        
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MySignals().setVisible(true);

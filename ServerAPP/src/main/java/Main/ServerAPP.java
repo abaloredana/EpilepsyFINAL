@@ -27,9 +27,7 @@ public class ServerAPP {
         dbManager = new DBManagerImpl();
         dbManager.connect();
         dbManager.createTables();
-
         serverSocket = new ServerSocket(9000);
-
         try {
             while (true) {
                 socket = serverSocket.accept();
