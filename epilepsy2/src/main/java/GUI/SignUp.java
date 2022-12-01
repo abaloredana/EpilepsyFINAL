@@ -5,19 +5,29 @@
 package GUI;
 
 import Client.Patient;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import ui.menu;
 
 /**
  *
  * @author loredanaabalo
  */
-public class SignUp extends javax.swing.JFrame {
+public class SignUp extends javax.swing.JFrame implements WindowListener {
 
     public ClientMenu menu;
     private SocketOb db;
+    private SignUp signup;
+    public Welcome wel;
 
     Patient patient = new Patient(null, null, null, null, null, null, null, null, null);
 
@@ -32,6 +42,10 @@ public class SignUp extends javax.swing.JFrame {
     }
 
     public SignUp() {
+    }
+
+    public void setSingup(SignUp singup) {
+        this.signup = singup;
     }
 
     /**
@@ -362,7 +376,9 @@ public class SignUp extends javax.swing.JFrame {
         }
 
         menu = new ClientMenu(db);
+        menu.setClimen(menu);
         try {
+             db.getOutputStream().write(0);
             db.getObjectOutputStream().writeObject(patient);
             Patient patient1 = (Patient) (db.getObjectInputStream().readObject());
             menu.setPatient(patient1);
@@ -371,6 +387,7 @@ public class SignUp extends javax.swing.JFrame {
             Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
         }
         menu.setVisible(true);
+        this.signup.setVisible(false);
     }//GEN-LAST:event_saveNewInfoButtonActionPerformed
 
     public Patient getNewUser(Patient patient) {
@@ -395,8 +412,16 @@ public class SignUp extends javax.swing.JFrame {
     }//GEN-LAST:event_dobtxtActionPerformed
 
     private void goBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goBackActionPerformed
-        Welcome welcome = new Welcome();
-        welcome.setVisible(true);
+        wel = new Welcome(db);
+        wel.setWel(wel);
+        wel.setVisible(true);
+        this.signup.setVisible(false);
+        int option = 1;
+        try {
+            db.getOutputStream().write(option);
+        } catch (IOException ex) {
+            Logger.getLogger(Welcome.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_goBackActionPerformed
 
     /**
@@ -437,6 +462,35 @@ public class SignUp extends javax.swing.JFrame {
         });
     }
 
+    private static void releaseResources(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream, Socket socket,
+            InputStream inputStream, OutputStream outputStream) {
+        try {
+            objectInputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            objectOutputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            outputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            inputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField MACtxt;
@@ -465,4 +519,40 @@ public class SignUp extends javax.swing.JFrame {
     private javax.swing.JButton saveNewInfoButton;
     private javax.swing.JTextField usernametxt;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        releaseResources(db.getObjectInputStream(), db.getObjectOutputStream(), db.getSocket(),
+                db.getInputStream(), db.getOutputStream());
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

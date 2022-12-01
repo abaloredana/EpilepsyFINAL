@@ -23,7 +23,7 @@ public class DBManagerImpl implements DBManager {
     @Override
     public void connect() {
         try {
-            this.c = DriverManager.getConnection("jdbc:sqlite:C:/sqlite/db/dbProject.db");
+            this.c = DriverManager.getConnection("jdbc:sqlite:C:/sqlite/db/dbProject2.db");
             c.createStatement().execute("PRAGMA foreign_keys=ON");
             patient = new PatientManagerImpl(c);
             eegSample = new EEGManagerImpl(c);

@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author andre
+ * @author andre&
  */
 public class ServerAPP {
 

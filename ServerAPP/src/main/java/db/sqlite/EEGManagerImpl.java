@@ -12,7 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *
@@ -31,8 +30,6 @@ public class EEGManagerImpl implements EEGManager {
     @Override
     public ArrayList<EEGSample> getEEGs(int id) {
         ArrayList<EEGSample> newSamples = new ArrayList<>();
-        ArrayList<Integer> eeg1;
-        ArrayList<Integer> elg1;
         EEGSample newSample;
         try {
             sql = "SELECT * FROM EEGSample WHERE patient_id = ?";
@@ -41,14 +38,12 @@ public class EEGManagerImpl implements EEGManager {
             ResultSet rs = p.executeQuery();
             while (rs.next()) {
                 int newId = rs.getInt("id");
-                String eeg = rs.getString("eeg");
-                eeg1 = ConvertToArray(eeg);
-                String elg = rs.getString("elg");
-                elg1 = ConvertToArray(elg);
+                String path = rs.getString("path");
                 String dos = rs.getString("dos");
                 String observations = rs.getString("observations");
                 int patient_id = rs.getInt("patient_id");
-                newSample = new EEGSample(newId, eeg1, elg1, dos, observations, patient_id);
+                newSample = new EEGSample(newId,null, null, dos, observations, patient_id);
+                newSample.setPath(path);
                 newSamples.add(newSample);
             }
         } catch (SQLException e) {
@@ -73,23 +68,4 @@ public class EEGManagerImpl implements EEGManager {
             ex.printStackTrace();
         }
     }
-
-    private ArrayList<Integer> ConvertToArray(String sample) {
-        String replace = sample.replace("[", "");
-        String replace1 = replace.replace("]", "");
-        String replace2 = replace1.replace(" ", "");
-        ArrayList<String> myList = new ArrayList<>(Arrays.asList(replace2.split(",")));
-        ArrayList<Integer> result1 = new ArrayList<>();
-        for (String stringValue : myList) {
-            try {
-                //Convert String to Integer, and store it into integer array list.
-                result1.add(Integer.parseInt(stringValue));
-            } catch (NumberFormatException nfe) {
-                System.out.println("Could not parse " + nfe);
-            }
-        }
-
-        return result1;
-    }
-
 }

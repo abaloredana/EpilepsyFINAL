@@ -4,43 +4,59 @@
  */
 package GUI;
 
+import Client.EEGSample;
 import Client.Patient;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import ui.menu;
 
 /**
  *
  * @author loredanaabalo
  */
-public class ClientMenu extends javax.swing.JFrame {
-
+public class ClientMenu extends javax.swing.JFrame implements WindowListener {
+    
     public Patient patient;
     public Record rec;
     public MySignals sam;
     private SocketOb db;
-
+    ClientMenu climen;
+    
     public ClientMenu(Patient patient) {
         this.patient = patient;
     }
-
+    
+    public void setClimen(ClientMenu climen) {
+        this.climen = climen;
+    }
+    
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
-
+    
     public Patient getPatient() {
         return patient;
     }
 
     /**
      * Creates new form ClientMenu
+     *
      * @param db
      */
     public ClientMenu(SocketOb db) {
         this.db = db;
         initComponents();
     }
-
+    
     public ClientMenu() {
     }
 
@@ -107,31 +123,43 @@ public class ClientMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void RecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RecordActionPerformed
-        rec = new Record(db,patient);
-        rec.setVisible(true);    
+        rec = new Record(db, patient);
+        rec.setRec(rec);
+        rec.setVisible(true);
         int option = 1;
         try {
             db.getOutputStream().write(option);
         } catch (IOException ex) {
             Logger.getLogger(Welcome.class.getName()).log(Level.SEVERE, null, ex);
         }// TODO add your handling code here:
+        this.climen.setVisible(false);
     }//GEN-LAST:event_RecordActionPerformed
 
     private void seeSignalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seeSignalsActionPerformed
-        sam = new MySignals(db,patient);
-        sam.setVisible(true);
+
         int option = 2;
         try {
             db.getOutputStream().write(option);
         } catch (IOException ex) {
             Logger.getLogger(Welcome.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //ArrayList<EEGSample> eegs1 = new ArrayList<>();
-        //outputStream.write(patient_id);
-        //int eegs_size = inputStream.read();
-        //for (int i = 0; i < eegs_size; i++) {
-        //  eegs1.add((EEGSample) objectInputStream.readObject());
-        //}
+        this.climen.setVisible(false);
+        ArrayList<EEGSample> eegs1 = new ArrayList<>();
+        try {
+            db.getOutputStream().write(patient.getId());
+            int eegs_size = db.getInputStream().read();
+            for (int i = 0; i < eegs_size; i++) {
+                eegs1.add((EEGSample) db.getObjectInputStream().readObject());
+                System.out.println(eegs1.get(i));
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ClientMenu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ClientMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        sam = new MySignals(db, patient);
+        sam.setSam(sam);
+        sam.setVisible(true);
     }//GEN-LAST:event_seeSignalsActionPerformed
 
     /**
@@ -168,10 +196,75 @@ public class ClientMenu extends javax.swing.JFrame {
             }
         });
     }
+    
+    private static void releaseResources(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream, Socket socket,
+            InputStream inputStream, OutputStream outputStream) {
+        try {
+            objectInputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            objectOutputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            outputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            inputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Record;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton seeSignals;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public void windowClosing(WindowEvent e) {
+        releaseResources(db.getObjectInputStream(), db.getObjectOutputStream(), db.getSocket(),
+                db.getInputStream(), db.getOutputStream());
+    }
+    
+    @Override
+    public void windowClosed(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public void windowIconified(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public void windowActivated(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

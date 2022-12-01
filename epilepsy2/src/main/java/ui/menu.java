@@ -7,10 +7,8 @@ package ui;
 import GUI.SocketOb;
 import GUI.Welcome;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,37 +36,9 @@ public class menu {
             System.exit(-1);
             Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         welcome = new Welcome(db);
+        welcome.setWel(welcome);
         welcome.setVisible(v1);
-    }
-
-    private static void releaseResources(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream, Socket socket,
-            InputStream inputStream, OutputStream outputStream) {
-        try {
-            objectInputStream.close();
-        } catch (IOException ex) {
-            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            objectOutputStream.close();
-        } catch (IOException ex) {
-            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            socket.close();
-        } catch (IOException ex) {
-            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            outputStream.close();
-        } catch (IOException ex) {
-            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            inputStream.close();
-        } catch (IOException ex) {
-            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

@@ -4,18 +4,27 @@
  */
 package GUI;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import ui.menu;
 
 /**
  *
  * @author loredanaabalo
  */
-public class Welcome extends javax.swing.JFrame {
+public class Welcome extends javax.swing.JFrame implements WindowListener {
 
     private SocketOb db;
+    private Welcome wel;
 
     public JButton getLoginbutton() {
         return loginbutton;
@@ -30,14 +39,17 @@ public class Welcome extends javax.swing.JFrame {
 
     /**
      * Creates new form Server_Interface
+     *
      * @param db
      */
     public Welcome(SocketOb db) {
         this.db = db;
         initComponents();
+        addWindowListener(this);
     }
 
     public Welcome() {
+        addWindowListener(this);
     }
 
     /**
@@ -142,6 +154,7 @@ public class Welcome extends javax.swing.JFrame {
 
     private void loginbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginbuttonActionPerformed
         log = new Login(db);
+        log.setLogin(log);
         log.setVisible(true);
         int option = 2;
         try {
@@ -149,19 +162,21 @@ public class Welcome extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Welcome.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.wel.setVisible(false);
     }//GEN-LAST:event_loginbuttonActionPerformed
 
     private void signUpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signUpButtonActionPerformed
         sup = new SignUp(db);
+        sup.setSingup(sup);
         sup.setVisible(true);
         int option = 1;
         try {
             db.getOutputStream().write(option);
         } catch (IOException ex) {
             Logger.getLogger(Welcome.class.getName()).log(Level.SEVERE, null, ex);
-
+        }
+        this.wel.setVisible(false);
     }//GEN-LAST:event_signUpButtonActionPerformed
-    }
 
     /**
      * @param args the command line arguments
@@ -188,10 +203,11 @@ public class Welcome extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Welcome.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        
         //</editor-fold>
         //</editor-fold>
-
         /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Welcome().setVisible(true);
@@ -200,7 +216,10 @@ public class Welcome extends javax.swing.JFrame {
         });
     }
 
-    
+    public void setWel(Welcome wel) {
+        this.wel = wel;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -210,4 +229,63 @@ public class Welcome extends javax.swing.JFrame {
     private javax.swing.JButton loginbutton;
     private javax.swing.JButton signUpButton;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        releaseResources(db.getObjectInputStream(), db.getObjectOutputStream(), db.getSocket(),
+                db.getInputStream(), db.getOutputStream());
+    }
+
+    private static void releaseResources(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream, Socket socket,
+            InputStream inputStream, OutputStream outputStream) {
+        try {
+            objectInputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            objectOutputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            outputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            inputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

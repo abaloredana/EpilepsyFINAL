@@ -5,21 +5,33 @@
 package GUI;
 
 import Client.Patient;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import ui.menu;
+
 /**
  *
  * @author loredanaabalo
  */
-public class Login extends javax.swing.JFrame {
-    
+public class Login extends javax.swing.JFrame implements WindowListener {
+
     public ClientMenu menu;
     private SocketOb db;
-   
+    private Login login;
+    public Welcome wel; 
+
     /**
      * Creates new form Login
+     *
      * @param db
      */
     public Login(SocketOb db) {
@@ -28,6 +40,10 @@ public class Login extends javax.swing.JFrame {
     }
 
     public Login() {
+    }
+
+    public void setLogin(Login login) {
+        this.login = login;
     }
 
     /**
@@ -160,11 +176,13 @@ public class Login extends javax.swing.JFrame {
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
 
         Patient patient = new Patient();
-        patient.setUsername(usernametxt.getText()); 
+        patient.setUsername(usernametxt.getText());
         String pwd = new String(passwordfield.getPassword());
-        patient.setPassword(pwd); 
-        menu= new ClientMenu(db);
+        patient.setPassword(pwd);
+        menu = new ClientMenu(db);
+        menu.setClimen(menu);
         try {
+            db.getOutputStream().write(0);
             PrintWriter printWriter = new PrintWriter(db.getOutputStream(), true);
             printWriter.println(patient.getUsername());
             printWriter.println(patient.getPassword());
@@ -175,6 +193,7 @@ public class Login extends javax.swing.JFrame {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
         menu.setVisible(true);
+        this.login.setVisible(false);
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void passwordfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordfieldActionPerformed
@@ -182,8 +201,16 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordfieldActionPerformed
 
     private void gobackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gobackActionPerformed
-        Welcome welcome = new Welcome();
-        welcome.setVisible(true);
+        wel = new Welcome(db);
+        wel.setWel(wel);
+        wel.setVisible(true);
+        this.login.setVisible(false);
+        int option=1;
+        try {
+            db.getOutputStream().write(option);
+        } catch (IOException ex) {
+            Logger.getLogger(Welcome.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_gobackActionPerformed
 
     /**
@@ -220,7 +247,36 @@ public class Login extends javax.swing.JFrame {
             }
         });
     }
-    
+
+    private static void releaseResources(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream, Socket socket,
+            InputStream inputStream, OutputStream outputStream) {
+        try {
+            objectInputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            objectOutputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            outputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            inputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -233,4 +289,40 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPasswordField passwordfield;
     private javax.swing.JTextField usernametxt;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        releaseResources(db.getObjectInputStream(), db.getObjectOutputStream(), db.getSocket(),
+                db.getInputStream(), db.getOutputStream());
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

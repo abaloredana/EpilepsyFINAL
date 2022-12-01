@@ -7,23 +7,33 @@ package GUI;
 import BITalino.BitalinoDemo;
 import Client.EEGSample;
 import Client.Patient;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import ui.menu;
 
 /**
  *
  * @author loredanaabalo
  */
-public class Record extends javax.swing.JFrame {
+public class Record extends javax.swing.JFrame implements WindowListener  {
 
     public ClientMenu cmenu;
     EEGSample eegSample;
     private SocketOb db;
     private Patient patient;
+    private Record rec;
+    public CheckRec checkRec;
 
     /**
      * SocketOb db Creates new form MySignals
@@ -39,6 +49,12 @@ public class Record extends javax.swing.JFrame {
     public Record() {
     }
 
+    public void setRec(Record rec) {
+        this.rec = rec;
+    }
+    
+    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -49,7 +65,7 @@ public class Record extends javax.swing.JFrame {
     private void initComponents() {
 
         startRec = new javax.swing.JButton();
-        goBack = new javax.swing.JButton();
+        Menu = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -68,15 +84,13 @@ public class Record extends javax.swing.JFrame {
             }
         });
 
-        goBack.setFont(new java.awt.Font(".SF NS Text", 1, 12)); // NOI18N
-        goBack.setText("Go back");
-        goBack.addActionListener(new java.awt.event.ActionListener() {
+        Menu.setFont(new java.awt.Font(".SF NS Text", 1, 12)); // NOI18N
+        Menu.setText("Menu");
+        Menu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                goBackActionPerformed(evt);
+                MenuActionPerformed(evt);
             }
         });
-
-        jLabel1.setIcon(new javax.swing.ImageIcon("/Users/loredanaabalo/Desktop/TELEMEDICINA/EpilepsyImage.jpeg")); // NOI18N
 
         jLabel2.setFont(new java.awt.Font(".SF NS Text", 3, 12)); // NOI18N
         jLabel2.setText("Please verify that the electrodes from your BITalino are placed as shown below:");
@@ -95,7 +109,7 @@ public class Record extends javax.swing.JFrame {
                 .addGap(230, 230, 230)
                 .addComponent(startRec)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(goBack)
+                .addComponent(Menu)
                 .addGap(28, 28, 28))
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
@@ -127,7 +141,7 @@ public class Record extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(startRec, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(goBack, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(Menu, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(31, 31, 31))
         );
 
@@ -152,19 +166,31 @@ public class Record extends javax.swing.JFrame {
         System.out.println(patient);
         symptoms = symptomstxt.getText();
         eegSample = new EEGSample(eeg, elg, dos,symptoms , patient.getId());
-        System.out.println(eegSample);
         try {
+            db.getOutputStream().write(0);
             db.getObjectOutputStream().writeObject(eegSample);
         } catch (IOException ex) {
             System.out.println("Unable to write the objects on the server.");
             Logger.getLogger(Record.class.getName()).log(Level.SEVERE, null, ex);
         }
+        checkRec = new CheckRec(db,patient);
+        checkRec.setCheckRec(checkRec);
+        checkRec.setVisible(true);
+        this.rec.setVisible(false);
     }//GEN-LAST:event_startRecActionPerformed
 
-    private void goBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goBackActionPerformed
+    private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
         cmenu = new ClientMenu(db);
+        cmenu.setPatient(patient);
+        cmenu.setClimen(cmenu);
         cmenu.setVisible(true);
-    }//GEN-LAST:event_goBackActionPerformed
+        this.rec.setVisible(false);
+        try {
+            db.getOutputStream().write(1);
+        } catch (IOException ex) {
+            Logger.getLogger(Welcome.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_MenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -201,9 +227,38 @@ public class Record extends javax.swing.JFrame {
             }
         });
     }
+    
+     private static void releaseResources(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream, Socket socket,
+            InputStream inputStream, OutputStream outputStream) {
+        try {
+            objectInputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            objectOutputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            outputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            inputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton goBack;
+    private javax.swing.JButton Menu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -211,4 +266,40 @@ public class Record extends javax.swing.JFrame {
     private javax.swing.JButton startRec;
     private javax.swing.JTextArea symptomstxt;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        releaseResources(db.getObjectInputStream(), db.getObjectOutputStream(), db.getSocket(),
+                db.getInputStream(), db.getOutputStream());
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
