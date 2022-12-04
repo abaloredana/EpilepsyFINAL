@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import Client.EEGSample;
 import Client.Patient;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -16,6 +17,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 import ui.menu;
 
 /**
@@ -29,6 +31,7 @@ public class MySignals extends javax.swing.JFrame implements WindowListener {
     private MySignals sam;
     public ClientMenu cmenu;
     public DisplayPlot displayPlot;
+    public ArrayList<EEGSample> eegs1;
 
     /**
      * Creates new form MySignals
@@ -36,10 +39,17 @@ public class MySignals extends javax.swing.JFrame implements WindowListener {
      * @param db
      * @param patient
      */
-    public MySignals(SocketOb db, Patient patient) {
+    public MySignals(SocketOb db, Patient patient, ArrayList<EEGSample> eegs1) {
         this.db = db;
         this.patient = patient;
+        this.eegs1=eegs1;
         initComponents();
+        
+        DefaultTableModel tblModel = (DefaultTableModel) jTable2.getModel();
+        for (int i = 0; i < eegs1.size(); i++) {
+                String data[] = {Integer.toString(eegs1.get(i).getId()),eegs1.get(i).getDos(),eegs1.get(i).getObservations()};
+                tblModel.addRow(data);
+            }
     }
 
     public MySignals() {
@@ -60,11 +70,13 @@ public class MySignals extends javax.swing.JFrame implements WindowListener {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jPanel1 = new javax.swing.JPanel();
+        pnlSignals = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         sampleId = new javax.swing.JTextField();
         select = new javax.swing.JButton();
         Menu = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -80,6 +92,8 @@ public class MySignals extends javax.swing.JFrame implements WindowListener {
         jScrollPane1.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        pnlSignals.setBorder(javax.swing.BorderFactory.createTitledBorder("Signals"));
 
         jLabel1.setText("Please enter the id of the signal you wish to see:");
 
@@ -103,26 +117,42 @@ public class MySignals extends javax.swing.JFrame implements WindowListener {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Sample ID", "Date of Sample", "Simptoms and notes"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
+
+        javax.swing.GroupLayout pnlSignalsLayout = new javax.swing.GroupLayout(pnlSignals);
+        pnlSignals.setLayout(pnlSignalsLayout);
+        pnlSignalsLayout.setHorizontalGroup(
+            pnlSignalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSignalsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(sampleId, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(select)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Menu)
                 .addGap(15, 15, 15))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSignalsLayout.createSequentialGroup()
+                .addContainerGap(54, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 588, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(228, 228, 228)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        pnlSignalsLayout.setVerticalGroup(
+            pnlSignalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSignalsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlSignalsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
                     .addComponent(sampleId, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(select)
@@ -134,14 +164,13 @@ public class MySignals extends javax.swing.JFrame implements WindowListener {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlSignals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(pnlSignals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -166,7 +195,7 @@ public class MySignals extends javax.swing.JFrame implements WindowListener {
     }//GEN-LAST:event_sampleIdActionPerformed
 
     private void selectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectActionPerformed
-        displayPlot = new DisplayPlot(db,patient);
+        displayPlot = new DisplayPlot(db,patient,eegs1);
         ArrayList<Integer> eeg = null;
         ArrayList<Integer> elg = null;
         try {
@@ -175,8 +204,6 @@ public class MySignals extends javax.swing.JFrame implements WindowListener {
             db.getOutputStream().write(id);
             eeg = (ArrayList) db.getObjectInputStream().readObject();
             elg = (ArrayList) db.getObjectInputStream().readObject();
-            System.out.println(eeg);
-            System.out.println(elg);
         } catch (IOException ex) {
             Logger.getLogger(MySignals.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -294,9 +321,11 @@ public class MySignals extends javax.swing.JFrame implements WindowListener {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Menu;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JPanel pnlSignals;
     private javax.swing.JTextField sampleId;
     private javax.swing.JButton select;
     // End of variables declaration//GEN-END:variables
