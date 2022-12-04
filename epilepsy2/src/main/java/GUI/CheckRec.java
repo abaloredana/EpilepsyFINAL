@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import Client.EEGSample;
 import Client.Patient;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -19,6 +20,8 @@ public class CheckRec extends javax.swing.JFrame {
     private SocketOb db;
     private Record rec;
     private Patient patient;
+    public ClientMenu cmenu;
+    EEGSample eegSample;
 
     /**
      * Creates new form CheckRec
@@ -27,17 +30,16 @@ public class CheckRec extends javax.swing.JFrame {
         initComponents();
     }
 
-    CheckRec(SocketOb db, Patient patient) {
+    CheckRec(SocketOb db, Patient patient, EEGSample eegSample) {
         this.db = db;
         this.patient = patient;
+        this.eegSample = eegSample;
         initComponents();
     }
 
     public void setCheckRec(CheckRec checkRec) {
         this.checkRec = checkRec;
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,69 +51,83 @@ public class CheckRec extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        Discard = new javax.swing.JButton();
         goBack = new javax.swing.JButton();
         Menu = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setText("Discard and record again");
+        Discard.setText("Discard and record again");
+        Discard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DiscardActionPerformed(evt);
+            }
+        });
 
-        goBack.setText("Record another signal");
+        goBack.setText("Save and record another signal");
         goBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 goBackActionPerformed(evt);
             }
         });
 
-        Menu.setText("Menu");
+        Menu.setText("Save and go back to menu");
+        Menu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(66, 66, 66)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(goBack)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
-                        .addComponent(Menu))
-                    .addComponent(jButton1))
-                .addContainerGap())
+                        .addGap(113, 113, 113)
+                        .addComponent(Menu, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(102, 102, 102)
+                        .addComponent(goBack, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(111, 111, 111)
+                        .addComponent(Discard, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(118, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(214, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(goBack)
-                    .addComponent(Menu))
-                .addGap(16, 16, 16))
+                .addContainerGap(118, Short.MAX_VALUE)
+                .addComponent(Discard, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(goBack, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(Menu, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 420, 280));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuActionPerformed
+        int option = 1;
+        cmenu = new ClientMenu(db);
+        cmenu.setPatient(patient);
+        cmenu.setClimen(cmenu);
+        cmenu.setVisible(true);
+        this.checkRec.setVisible(false);
+        try {
+            db.getObjectOutputStream().writeObject(eegSample);
+            db.getOutputStream().write(option);
+            db.getOutputStream().write(option);
+        } catch (IOException ex) {
+            Logger.getLogger(Welcome.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_MenuActionPerformed
 
     private void goBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goBackActionPerformed
         rec = new Record(db, patient);
@@ -120,11 +136,26 @@ public class CheckRec extends javax.swing.JFrame {
         this.checkRec.setVisible(false);
         int option = 1;
         try {
+            db.getObjectOutputStream().writeObject(eegSample);
             db.getOutputStream().write(option);
         } catch (IOException ex) {
             Logger.getLogger(Welcome.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_goBackActionPerformed
+
+    private void DiscardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DiscardActionPerformed
+        rec = new Record(db, patient);
+        rec.setRec(rec);
+        rec.setVisible(true);
+        this.checkRec.setVisible(false);
+        int option = 1;
+        try {
+            db.getObjectOutputStream().writeObject(null);
+            db.getOutputStream().write(option);
+        } catch (IOException ex) {
+            Logger.getLogger(Welcome.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_DiscardActionPerformed
 
     /**
      * @param args the command line arguments
@@ -162,9 +193,9 @@ public class CheckRec extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Discard;
     private javax.swing.JButton Menu;
     private javax.swing.JButton goBack;
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

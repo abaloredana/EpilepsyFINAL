@@ -9,7 +9,6 @@ import db.interfaces.*;
 import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -112,26 +111,28 @@ public class ServerAPPThreads implements Runnable {
                             if (gb2 == 0) {
                                 try {
                                     eegSample = (EEGSample) (objectInputStream.readObject());
-                                    String pathAux = (String) (eegSample.getPatient_id() + "__" + eegSample.getDos());
-                                    String path = "C:/sqlite/db/" + pathAux + ".txt";
-                                    eegSample.setPath(path);
-                                    file = new File(path);
-                                    file.createNewFile();
-                                    try {
-                                        FileWriter fw = new FileWriter(file);
-                                        for (int i = 0; i < eegSample.getEeg().size(); i++) {
-                                            fw.write(Integer.toString(eegSample.getEeg().get(i)));
+                                    if (eegSample != null) {
+                                        String pathAux = (String) (eegSample.getPatient_id() + "__" + eegSample.getDos());
+                                        String path = "C:/sqlite/db/" + pathAux + ".txt";
+                                        eegSample.setPath(path);
+                                        file = new File(path);
+                                        file.createNewFile();
+                                        try {
+                                            FileWriter fw = new FileWriter(file);
+                                            for (int i = 0; i < eegSample.getEeg().size(); i++) {
+                                                fw.write(Integer.toString(eegSample.getEeg().get(i)));
+                                            }
+                                            fw.write("_");
+                                            for (int i = 0; i < eegSample.getElg().size(); i++) {
+                                                fw.write(Integer.toString(eegSample.getElg().get(i)));
+                                            }
+                                            fw.close();
+                                        } catch (IOException e) {
+                                            System.out.println("ERROR WRITING FILE");
+                                            e.printStackTrace();
                                         }
-                                        fw.write("_");
-                                        for (int i = 0; i < eegSample.getElg().size(); i++) {
-                                            fw.write(Integer.toString(eegSample.getElg().get(i)));
-                                        }
-                                        fw.close();
-                                    } catch (IOException e) {
-                                        System.out.println("ERROR WRITING FILE");
-                                        e.printStackTrace();
+                                        EEGManager.newEEGSample(eegSample);
                                     }
-                                    EEGManager.newEEGSample(eegSample);
                                 } catch (EOFException ex) {
                                     System.out.println("All data have been correctly read.");
                                 } catch (IOException | ClassNotFoundException ex) {

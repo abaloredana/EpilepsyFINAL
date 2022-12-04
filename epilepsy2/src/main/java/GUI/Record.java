@@ -168,12 +168,11 @@ public class Record extends javax.swing.JFrame implements WindowListener  {
         eegSample = new EEGSample(eeg, elg, dos,symptoms , patient.getId());
         try {
             db.getOutputStream().write(0);
-            db.getObjectOutputStream().writeObject(eegSample);
         } catch (IOException ex) {
             System.out.println("Unable to write the objects on the server.");
             Logger.getLogger(Record.class.getName()).log(Level.SEVERE, null, ex);
         }
-        checkRec = new CheckRec(db,patient);
+        checkRec = new CheckRec(db,patient,eegSample);
         checkRec.setCheckRec(checkRec);
         checkRec.setVisible(true);
         this.rec.setVisible(false);

@@ -150,14 +150,13 @@ public class ClientMenu extends javax.swing.JFrame implements WindowListener {
             int eegs_size = db.getInputStream().read();
             for (int i = 0; i < eegs_size; i++) {
                 eegs1.add((EEGSample) db.getObjectInputStream().readObject());
-                System.out.println(eegs1.get(i));
             }
         } catch (IOException ex) {
             Logger.getLogger(ClientMenu.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClientMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        sam = new MySignals(db, patient);
+        sam = new MySignals(db, patient,eegs1);
         sam.setSam(sam);
         sam.setVisible(true);
     }//GEN-LAST:event_seeSignalsActionPerformed
