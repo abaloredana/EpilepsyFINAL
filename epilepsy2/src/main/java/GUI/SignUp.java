@@ -13,8 +13,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import ui.menu;
 
@@ -28,6 +30,9 @@ public class SignUp extends javax.swing.JFrame implements WindowListener {
     private SocketOb db;
     private SignUp signup;
     public Welcome wel;
+    Boolean[] validated;
+    static Boolean[] correct = {true, true, true, true, true, true, true, true};
+    String verifiedName, verifiedLastname, verifiedPhone, verifiedEmail, verifiedMAC, verifiedDob, verifiedUsername, verifiedPassword, validationMessage;
 
     Patient patient = new Patient(null, null, null, null, null, null, null, null, null);
 
@@ -342,52 +347,85 @@ public class SignUp extends javax.swing.JFrame implements WindowListener {
 
     private void saveNewInfoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveNewInfoButtonActionPerformed
 
-        patient.setName(nametxt.getText());
-        System.out.println("Name: " + patient.getName());
-        patient.setLastname(lastnametxt.getText());
-        System.out.println("Lastname: " + patient.getLastname());
-        patient.setPhone(phonetxt.getText());
-        System.out.println("Phone: " + patient.getPhone());
-        patient.setEmail(emailtxt.getText());
-        System.out.println("Address: " + patient.getEmail());
-        patient.setMAC(MACtxt.getText());
-        System.out.println("MAC:" + patient.getMAC());
-        if (malecheck.isSelected()) {
-            patient.setGender("M");
-        }
-        if (femalecheck.isSelected()) {
-            patient.setGender("F");
-        }
-        System.out.println("Gender:" + patient.getGender());
-        String dob = dobtxt.getText();
-        patient.setDob(dob);
-        //java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        //java.time.LocalDate textFieldAsDate = java.time.LocalDate.parse(dob, formatter);
-        //patient.setDob(textFieldAsDate);
-        //java.sql.Date sqlDate = java.sql.Date.valueOf(textFieldAsDate); Para que Nina pueda guardarlo a la BDD
-        //System.out.println("Date: " + patient.dob);
-        patient.setUsername(usernametxt.getText());
-        System.out.println("Username:" + patient.getUsername());
-        String pwd = new String(passwordfield.getPassword());
-        patient.setPassword(pwd);
+        verifiedName = nametxt.getText();
+        verifiedLastname = lastnametxt.getText();
+        verifiedPhone = phonetxt.getText();
+        verifiedEmail = emailtxt.getText();
+        verifiedMAC = MACtxt.getText();
+        verifiedDob = dobtxt.getText();
+        verifiedUsername = usernametxt.getText();
+        verifiedPassword = new String(passwordfield.getPassword());
+        validated = Validation(verifiedName, verifiedLastname, verifiedPhone, verifiedEmail, verifiedMAC, verifiedDob, verifiedUsername, verifiedPassword, malecheck, femalecheck);
+        if (Arrays.equals(validated, correct) == false) {
+            validationMessage = "";
+            if (validated[0] == false) {
+                validationMessage = validationMessage + "The Name is not valid\n";
+            }
+            if (validated[1] == false) {
+                validationMessage = validationMessage + "The Last Name is not valid\n";
+            }
+            if (validated[2] == false) {
+                validationMessage = validationMessage + "The Phone is not valid\n";
+            }
+            if (validated[3] == false) {
+                validationMessage = validationMessage + "The Email is not valid\n";
+            }
+            if (validated[4] == false) {
+                validationMessage = validationMessage + "The MAC address is not valid\n";
+            }
+            if (validated[5] == false) {
+                validationMessage = validationMessage + "The Date of Birth is not valid\n";
+            }
+            if (validated[6] == false) {
+                validationMessage = validationMessage + "The Username is not valid\n";
+            }
+            if (validated[7] == false) {
+                validationMessage = validationMessage + "The Password is not valid\n";
+            }
+            JOptionPane.showMessageDialog(null, validationMessage);
+        } else {
+            patient.setName(verifiedName);
+            System.out.println("Name: " + patient.getName());
+            patient.setLastname(verifiedLastname);
+            System.out.println("Lastname: " + patient.getLastname());
+            patient.setPhone(verifiedPhone);
+            System.out.println("Phone: " + patient.getPhone());
+            patient.setEmail(verifiedEmail);
+            System.out.println("Address: " + patient.getEmail());
+            patient.setMAC(verifiedMAC);
+            System.out.println("MAC:" + patient.getMAC());
+            if (malecheck.isSelected()) {
+                patient.setGender("M");
+            }
+            if (femalecheck.isSelected()) {
+                patient.setGender("F");
+            }
+            System.out.println("Gender:" + patient.getGender());
+            patient.setDob(verifiedDob);
+            System.out.println("Date of Birth: " + patient.getDob());
+            patient.setUsername(verifiedUsername);
+            System.out.println("Username:" + patient.getUsername());
+            patient.setPassword(verifiedPassword);
+            System.out.println("Password:" + patient.getPassword());
 
-        if (patient.getGender() != null) {
-            JOptionPane.showMessageDialog(null, "Signup was successful");
-        }
+            if (patient.getGender() != null) {
+                JOptionPane.showMessageDialog(null, "Signup was successful");
+            }
 
-        menu = new ClientMenu(db);
-        menu.setClimen(menu);
-        try {
-             db.getOutputStream().write(0);
-            db.getObjectOutputStream().writeObject(patient);
-            Patient patient1 = (Patient) (db.getObjectInputStream().readObject());
-            menu.setPatient(patient1);
-            System.out.println(patient1);
-        } catch (ClassNotFoundException | IOException ex) {
-            Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+            menu = new ClientMenu(db);
+            menu.setClimen(menu);
+            try {
+                db.getOutputStream().write(0);
+                db.getObjectOutputStream().writeObject(patient);
+                Patient patient1 = (Patient) (db.getObjectInputStream().readObject());
+                menu.setPatient(patient1);
+                System.out.println(patient1);
+            } catch (ClassNotFoundException | IOException ex) {
+                Logger.getLogger(SignUp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            menu.setVisible(true);
+            this.signup.setVisible(false);
         }
-        menu.setVisible(true);
-        this.signup.setVisible(false);
     }//GEN-LAST:event_saveNewInfoButtonActionPerformed
 
     public Patient getNewUser(Patient patient) {
@@ -491,6 +529,71 @@ public class SignUp extends javax.swing.JFrame implements WindowListener {
         }
     }
 
+    public static Boolean[] Validation(String name, String lastname, String phone, String email, String MAC, String dob, String username, String password, JCheckBox malecheck, JCheckBox femalecheck) {
+        String namePattern = "[ A-Za-z]+";
+        String phonePattern = "[6789]\\d{8}";
+        String emailPattern = "([.0-9_a-z]{6,30})@(\\p{Lower}+)\\x2E(\\p{Lower}+)";
+        String MACPattern = "[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}";
+        String dobPattern = "(19[1-9]\\d||20[0-1]\\d||202[0-2])-"
+                + "(02-(0[1-9]||1\\d||2[0-8])||"
+                + "(0[13578]||1[02])-(0[1-9]||1\\d||2\\d||3[0-1])"
+                + "(0[469]||11)-(0[1-9]||1\\d||2\\d||30))";
+        String usernamePattern = "[.0-9_a-z]{6,30}";
+        String passwordPattern1 = "[\\d\\p{Alnum}\\p{Punct}]*\\d[\\d\\p{Alnum}\\p{Punct}]*";
+        String passwordPattern2 = "[\\d\\p{Alnum}\\p{Punct}]*\\p{Upper}[\\d\\p{Alnum}\\p{Punct}]*";
+        String passwordPattern3 = "[\\d\\p{Alnum}\\p{Punct}]*\\p{Lower}[\\d\\p{Alnum}\\p{Punct}]*";
+        String passwordPattern4 = "[\\d\\p{Alnum}\\p{Punct}]*\\p{Punct}[\\d\\p{Alnum}\\p{Punct}]*";
+        String passwordPattern5 = "[\\d\\p{Alnum}\\p{Punct}]{8,}";
+        Boolean[] validated = new Boolean[9];
+        if (name.matches(namePattern)) {
+            Arrays.fill(validated, 0, 1, true);
+        } else {
+            Arrays.fill(validated, 0, 1, false);
+        }
+        if (lastname.matches(namePattern)) {
+            Arrays.fill(validated, 1, 2, true);
+        } else {
+            Arrays.fill(validated, 1, 2, false);
+        }
+        if (phone.matches(phonePattern)) {
+            Arrays.fill(validated, 2, 3, true);
+        } else {
+            Arrays.fill(validated, 2, 3, false);
+        }
+        if (email.matches(emailPattern)) {
+            Arrays.fill(validated, 3, 4, true);
+        } else {
+            Arrays.fill(validated, 3, 4, false);
+        }
+        if (MAC.matches(MACPattern)) {
+            Arrays.fill(validated, 4, 5, true);
+        } else {
+            Arrays.fill(validated, 4, 5, false);
+        }
+        if (dob.matches(dobPattern)) {
+            Arrays.fill(validated, 5, 6, true);
+        } else {
+            Arrays.fill(validated, 5, 6, false);
+        }
+        if (username.matches(usernamePattern)) {
+            Arrays.fill(validated, 6, 7, true);
+        } else {
+            Arrays.fill(validated, 6, 7, false);
+        }
+        if (password.matches(passwordPattern1)
+                && password.matches(passwordPattern2)
+                && password.matches(passwordPattern3)
+                && password.matches(passwordPattern4)
+                && password.matches(passwordPattern5)) {
+            Arrays.fill(validated, 7, 8, true);
+        } else {
+            Arrays.fill(validated, 7, 8, false);
+        }
+        if(malecheck.isSelected()||femalecheck.isSelected()){
+            
+        }
+        return validated;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField MACtxt;
