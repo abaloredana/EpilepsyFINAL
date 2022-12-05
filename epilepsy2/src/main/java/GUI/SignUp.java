@@ -531,7 +531,7 @@ public class SignUp extends javax.swing.JFrame implements WindowListener {
     }
 
     public static Boolean[] Validation(String name, String lastname, String phone, String email, String MAC, String dob, String username, String password, JCheckBox malecheck, JCheckBox femalecheck) {
-        String namePattern = "[ A-Za-z]+";
+        String namePattern = "[ A-Za-zñ]+";
         String phonePattern = "[6789]\\d{8}";
         String emailPattern = "([.0-9_a-z]{6,30})@(\\p{Lower}+)\\x2E(\\p{Lower}+)";
         String MACPattern = "[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}";
