@@ -383,6 +383,7 @@ public class SignUp extends javax.swing.JFrame implements WindowListener {
                 validationMessage = validationMessage + "The Password is not valid\n";
             }
             JOptionPane.showMessageDialog(null, validationMessage);
+            
         } else {
             patient.setName(verifiedName);
             System.out.println("Name: " + patient.getName());
