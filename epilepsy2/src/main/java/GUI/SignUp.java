@@ -31,7 +31,7 @@ public class SignUp extends javax.swing.JFrame implements WindowListener {
     private SignUp signup;
     public Welcome wel;
     Boolean[] validated;
-    static Boolean[] correct = {true, true, true, true, true, true, true, true};
+    static Boolean[] correct = {true, true, true, true, true, true, true, true, true};
     String verifiedName, verifiedLastname, verifiedPhone, verifiedEmail, verifiedMAC, verifiedDob, verifiedUsername, verifiedPassword, validationMessage;
 
     Patient patient = new Patient(null, null, null, null, null, null, null, null, null);
@@ -355,7 +355,9 @@ public class SignUp extends javax.swing.JFrame implements WindowListener {
         verifiedDob = dobtxt.getText();
         verifiedUsername = usernametxt.getText();
         verifiedPassword = new String(passwordfield.getPassword());
-        validated = Validation(verifiedName, verifiedLastname, verifiedPhone, verifiedEmail, verifiedMAC, verifiedDob, verifiedUsername, verifiedPassword, malecheck, femalecheck);
+        validated = Validation(verifiedName, verifiedLastname, verifiedPhone, verifiedEmail, verifiedMAC, verifiedDob,
+                verifiedUsername, verifiedPassword, malecheck, femalecheck);
+        System.out.println(Arrays.toString(validated));
         if (Arrays.equals(validated, correct) == false) {
             validationMessage = "";
             if (validated[0] == false) {
@@ -382,8 +384,10 @@ public class SignUp extends javax.swing.JFrame implements WindowListener {
             if (validated[7] == false) {
                 validationMessage = validationMessage + "The Password is not valid\n";
             }
+            if (validated[8] == false) {
+                validationMessage = validationMessage + "The Gender is not selected\n";
+            }
             JOptionPane.showMessageDialog(null, validationMessage);
-            
         } else {
             patient.setName(verifiedName);
             System.out.println("Name: " + patient.getName());
@@ -590,8 +594,10 @@ public class SignUp extends javax.swing.JFrame implements WindowListener {
         } else {
             Arrays.fill(validated, 7, 8, false);
         }
-        if(malecheck.isSelected()||femalecheck.isSelected()){
-            
+        if (malecheck.isSelected() || femalecheck.isSelected()) {
+            Arrays.fill(validated, 8, 9, true);
+        } else {
+            Arrays.fill(validated, 8, 9, false);
         }
         return validated;
     }
