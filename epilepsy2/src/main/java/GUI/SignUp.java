@@ -535,10 +535,10 @@ public class SignUp extends javax.swing.JFrame implements WindowListener {
         String phonePattern = "[6789]\\d{8}";
         String emailPattern = "([.0-9_a-z]{6,30})@(\\p{Lower}+)\\x2E(\\p{Lower}+)";
         String MACPattern = "[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}";
-        String dobPattern = "(19[1-9]\\d||20[0-1]\\d||202[0-2])-"
-                + "(02-(0[1-9]||1\\d||2[0-8])||"
-                + "(0[13578]||1[02])-(0[1-9]||1\\d||2\\d||3[0-1])"
-                + "(0[469]||11)-(0[1-9]||1\\d||2\\d||30))";
+        String dobPattern = "\\d{4}-"
+                + "((02-(0[1-9]||1\\d||2[0-8]))||"
+                + "((0[13578]||1[02])-(0[1-9]||1\\d||2\\d||3[0-1]))||"
+                + "((0[469]||11)-(0[1-9]||1\\d||2\\d||30)))";
         String usernamePattern = "[.0-9_a-z]{6,30}";
         String passwordPattern1 = "[\\d\\p{Alnum}\\p{Punct}]*\\d[\\d\\p{Alnum}\\p{Punct}]*";
         String passwordPattern2 = "[\\d\\p{Alnum}\\p{Punct}]*\\p{Upper}[\\d\\p{Alnum}\\p{Punct}]*";
